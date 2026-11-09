@@ -1,0 +1,74 @@
+--- 13:42:39
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:42:44
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:42:49
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:42:55
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:00
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:06
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:11
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:16
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:21
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:27
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:32
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   42m          151Mi           
+mysql-0                     mysql      21m          448Mi           
+--- 13:43:38
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           
+--- 13:43:43
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           
+--- 13:43:49
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           
+--- 13:43:55
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           
+--- 13:44:01
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           
+--- 13:44:07
+POD                         NAME       CPU(cores)   MEMORY(bytes)   
+crud-app-7b7575c85d-2xw8n   crud-app   685m         236Mi           
+k6-load-test-f4gxs          k6         233m         157Mi           
+mysql-0                     mysql      138m         462Mi           

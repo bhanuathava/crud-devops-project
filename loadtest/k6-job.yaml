@@ -1,0 +1,31 @@
+# Runs loadtest/k6-script.js inside the cluster. Create the script ConfigMap first:
+#   kubectl -n crud-app create configmap k6-script --from-file=loadtest/k6-script.js
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: k6-load-test
+  namespace: crud-app
+  labels:
+    app: k6
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: k6
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: k6
+          image: grafana/k6:1.3.0
+          args: ["run", "--no-color", "/scripts/k6-script.js"]
+          resources:
+            requests: { cpu: 500m, memory: 256Mi }
+            limits:   { cpu: "1500m", memory: 1Gi }
+          volumeMounts:
+            - name: script
+              mountPath: /scripts
+      volumes:
+        - name: script
+          configMap:
+            name: k6-script
