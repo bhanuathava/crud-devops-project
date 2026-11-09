@@ -1,0 +1,43 @@
+# Scale the app between 1 and 4 pods on CPU. Utilization is measured against the
+# container's CPU *request* (250m), so 70% = ~175m per pod on average.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: crud-app
+  namespace: crud-app
+  labels:
+    app: crud-app
+    app.kubernetes.io/part-of: crud-devops-project
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: crud-app
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80   # of the 256Mi request
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 120   # avoid flapping after a burst
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60

@@ -1,0 +1,43 @@
+### Before crash
+$ kubectl get pods -n crud-app
+NAME                        READY   STATUS    RESTARTS   AGE
+crud-app-7b7575c85d-2xw8n   1/1     Running   0          5m53s
+
+### Crash: SIGKILL the Puma master process from the minikube node (13:47:27)
+$ minikube ssh -- sudo pkill -9 -f "^puma .*:3000"
+
+### Right after crash (13:47:37)
+NAME                        READY   STATUS    RESTARTS     AGE
+crud-app-7b7575c85d-2xw8n   0/1     Running   1 (2s ago)   6m3s
+
+### After recovery (13:47:40)
+$ kubectl get pods -n crud-app
+NAME                        READY   STATUS    RESTARTS     AGE
+crud-app-7b7575c85d-2xw8n   1/1     Running   1 (5s ago)   6m6s
+
+$ kubectl describe pod (last state)
+    Last State:     Terminated
+      Reason:       Error
+      Exit Code:    137
+      Started:      Mon, 09 Nov 2026 13:41:34 +0100
+      Finished:     Mon, 09 Nov 2026 13:47:35 +0100
+    Ready:          True
+    Restart Count:  1
+
+$ curl /api/tasks (data still there)
+[{"id":1,"title":"hello from k8s","completed":false}]
+
+
+### Scenario 2: hang (SIGSTOP Puma master + workers) so only the liveness probe can detect it (13:51:26)
+$ minikube ssh -- 'sudo kill -STOP $(pgrep -f "^puma")'
+
+### After liveness restart (13:52:36)
+$ kubectl get pods -n crud-app
+NAME                        READY   STATUS    RESTARTS     AGE
+crud-app-7b7575c85d-2xw8n   1/1     Running   2 (9s ago)   11m
+
+$ kubectl get events (probe failures)
+39s         Normal    Killing                 pod/crud-app-7b7575c85d-2xw8n              Container crud-app failed liveness probe, will be restarted
+39s         Warning   Unhealthy               pod/crud-app-7b7575c85d-2xw8n              Liveness probe failed: Get "http://10.244.0.5:3000/up": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+10s         Warning   Unhealthy               pod/crud-app-7b7575c85d-2xw8n              Readiness probe failed: Get "http://10.244.0.5:3000/up": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+8s          Warning   Unhealthy               pod/crud-app-7b7575c85d-2xw8n              Readiness probe failed: Get "http://10.244.0.5:3000/up": dial tcp 10.244.0.5:3000: connect: connection refused
