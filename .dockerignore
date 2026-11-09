@@ -1,0 +1,16 @@
+/.git/
+/.gitignore
+/.dockerignore
+/Dockerfile*
+/docker-compose*.yaml
+/.env*
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/config/master.key
+/config/*.key
+/k8s/
+/loadtest/
+/docs/
+/test/

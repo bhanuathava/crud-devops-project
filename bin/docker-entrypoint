@@ -1,0 +1,8 @@
+#!/bin/bash -e
+# Prepare the database (create if missing, run pending migrations) whenever the
+# container starts the web server, then hand over to the main command (Puma).
+if [ "$1" == "bundle" ] && [ "$3" == "puma" ]; then
+  ./bin/rails db:prepare
+fi
+
+exec "$@"
