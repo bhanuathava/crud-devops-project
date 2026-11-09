@@ -1,0 +1,69 @@
+--- 13:53:16
+crud-app   Deployment/crud-app   cpu: 63%/70%, memory: 40%/80%   1     4     1     31s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (49s ago)   11m
+--- 13:53:26
+crud-app   Deployment/crud-app   cpu: 63%/70%, memory: 40%/80%   1     4     1     41s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (59s ago)   11m
+--- 13:53:36
+crud-app   Deployment/crud-app   cpu: 63%/70%, memory: 40%/80%   1     4     1     51s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (69s ago)   12m
+--- 13:53:46
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     1     61s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (79s ago)   12m
+crud-app-7b7575c85d-hwfxl   0/1   Running   0             1s
+--- 13:53:56
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     1     72s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (90s ago)   12m
+crud-app-7b7575c85d-hwfxl   1/1   Running   0             12s
+--- 13:54:07
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     2     82s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (100s ago)   12m
+crud-app-7b7575c85d-hwfxl   1/1   Running   0              22s
+--- 13:54:17
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     2     93s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (111s ago)   12m
+crud-app-7b7575c85d-hwfxl   1/1   Running   0              33s
+--- 13:54:28
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     2     103s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m1s ago)   12m
+crud-app-7b7575c85d-hwfxl   1/1   Running   0              43s
+--- 13:54:38
+crud-app   Deployment/crud-app   cpu: 89%/70%, memory: 90%/80%   1     4     2     113s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m11s ago)   13m
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               53s
+--- 13:54:49
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     2     2m4s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m22s ago)   13m
+crud-app-7b7575c85d-57mz9   0/1   Running   0               4s
+crud-app-7b7575c85d-bh6h5   0/1   Running   0               4s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               64s
+--- 13:54:59
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     2     2m14s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m32s ago)   13m
+crud-app-7b7575c85d-57mz9   1/1   Running   0               14s
+crud-app-7b7575c85d-bh6h5   1/1   Running   0               14s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               74s
+--- 13:55:09
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     4     2m24s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m42s ago)   13m
+crud-app-7b7575c85d-57mz9   1/1   Running   0               24s
+crud-app-7b7575c85d-bh6h5   1/1   Running   0               24s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               84s
+--- 13:55:20
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     4     2m35s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (2m53s ago)   13m
+crud-app-7b7575c85d-57mz9   1/1   Running   0               35s
+crud-app-7b7575c85d-bh6h5   1/1   Running   0               35s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               95s
+--- 13:55:30
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     4     2m45s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (3m3s ago)   13m
+crud-app-7b7575c85d-57mz9   1/1   Running   0              45s
+crud-app-7b7575c85d-bh6h5   1/1   Running   0              45s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0              105s
+--- 13:55:40
+crud-app   Deployment/crud-app   cpu: 377%/70%, memory: 70%/80%   1     4     4     2m55s
+crud-app-7b7575c85d-2xw8n   1/1   Running   2 (3m13s ago)   14m
+crud-app-7b7575c85d-57mz9   1/1   Running   0               55s
+crud-app-7b7575c85d-bh6h5   1/1   Running   0               55s
+crud-app-7b7575c85d-hwfxl   1/1   Running   0               115s

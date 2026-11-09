@@ -100,3 +100,17 @@ bin/rails test
 ## Puma settings
 
 Puma runs `WEB_CONCURRENCY` worker processes, each with `RAILS_MAX_THREADS` threads. The total number of requests handled at the same time is workers × threads (with `WEB_CONCURRENCY=0`, it is one process × threads). Each thread needs its own database connection, so the connection pool size follows `RAILS_MAX_THREADS`.
+
+## Run with Docker Compose
+
+```bash
+cp .env.example .env    # fill in passwords and RAILS_MASTER_KEY (contents of config/master.key)
+docker compose up -d --build
+```
+
+Open http://localhost:3000. MySQL data is kept in the `crud-mysql-data` volume.
+
+## Run on Kubernetes (minikube), load test, fault tolerance
+
+See [docs/REPORT.md](docs/REPORT.md) for the deploy commands, the k6 load test
+(`loadtest/`), HPA and fault-tolerance results. Manifests are in `k8s/`.

@@ -1,4 +1,6 @@
-# Scale the app between 1 and 4 pods on CPU. Utilization is measured against the
+# Scale the app between 1 and 4 pods on CPU only. Memory is not used: Puma's memory
+# does not fall after a burst, so a memory target would block scale-down.
+# Utilization is measured against the
 # container's CPU *request* (250m), so 70% = ~175m per pod on average.
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -22,12 +24,6 @@ spec:
         target:
           type: Utilization
           averageUtilization: 70
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: 80   # of the 256Mi request
   behavior:
     scaleUp:
       stabilizationWindowSeconds: 0
