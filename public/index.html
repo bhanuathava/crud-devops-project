@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rails CRUD App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 0 16px;
+        background: #f3f5f7;
+      }
+
+      .card {
+        background: white;
+        padding: 18px;
+        margin: 12px 0;
+        border-radius: 8px;
+      }
+
+      input,
+      button {
+        padding: 10px;
+        margin: 4px;
+      }
+
+      input {
+        max-width: 65%;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .delete {
+        color: #b42318;
+      }
+
+      .task {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .task input[type="text"] {
+        flex: 1;
+        min-width: 120px;
+        max-width: none;
+      }
+
+      .task input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .task.done input[type="text"] {
+        text-decoration: line-through;
+        color: #8a8f98;
+      }
+
+      .progress-text {
+        margin: 0 4px 8px;
+        color: #4b5563;
+      }
+
+      .progress-bar {
+        height: 8px;
+        margin: 0 4px;
+        border-radius: 4px;
+        background: #e5e7eb;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0;
+        background: #16a34a;
+        transition: width 0.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Task Manager</h1>
+
+    <div class="card">
+      <form id="create-form">
+        <input id="new-title" type="text" placeholder="Add a task" required />
+        <button type="submit">Create Task</button>
+      </form>
+    </div>
+
+    <div class="card" id="progress" hidden>
+      <div class="progress-text" id="progress-text"></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div id="message"></div>
+    <div id="tasks"></div>
+
+    <script>
+      const list = document.getElementById("tasks");
+      const message = document.getElementById("message");
+
+      function showProgress(tasks) {
+        const done = tasks.filter((task) => task.completed).length;
+        const percent = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
+
+        document.getElementById("progress").hidden = tasks.length === 0;
+        document.getElementById("progress-text").textContent =
+          `${done} of ${tasks.length} tasks completed (${percent}%)`;
+        document.getElementById("progress-fill").style.width = `${percent}%`;
+      }
+
+      async function loadTasks() {
+        const response = await fetch("/api/tasks");
+        const tasks = await response.json();
+
+        list.replaceChildren();
+        showProgress(tasks);
+
+        tasks.forEach((task) => {
+          const card = document.createElement("div");
+          card.className = task.completed ? "card task done" : "card task";
+
+          const check = document.createElement("input");
+          check.type = "checkbox";
+          check.checked = task.completed;
+          check.setAttribute("aria-label", "Mark task as completed");
+          check.onchange = async () => {
+            const result = await fetch(`/api/tasks/${task.id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ completed: check.checked })
+            });
+            message.textContent = !result.ok
+              ? "Could not update task"
+              : check.checked ? "Task completed" : "Task marked as not completed";
+            await loadTasks();
+          };
+
+          const title = document.createElement("input");
+          title.type = "text";
+          title.value = task.title;
+          title.setAttribute("aria-label", "Task title");
+
+          const update = document.createElement("button");
+          update.textContent = "Update";
+          update.onclick = async () => {
+            const result = await fetch(`/api/tasks/${task.id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ title: title.value })
+            });
+            message.textContent = result.ok ? "Task updated" : "Could not update task";
+            await loadTasks();
+          };
+
+          const remove = document.createElement("button");
+          remove.className = "delete";
+          remove.textContent = "Delete";
+          remove.onclick = async () => {
+            const result = await fetch(`/api/tasks/${task.id}`, {
+              method: "DELETE"
+            });
+            message.textContent = result.ok ? "Task deleted" : "Could not delete task";
+            await loadTasks();
+          };
+
+          card.append(check, title, update, remove);
+          list.appendChild(card);
+        });
+      }
+
+      document.getElementById("create-form").onsubmit = async (event) => {
+        event.preventDefault();
+
+        const title = document.getElementById("new-title");
+        const response = await fetch("/api/tasks", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: title.value })
+        });
+
+        message.textContent = response.ok ? "Task created" : "Could not create task";
+
+        if (response.ok) title.value = "";
+        await loadTasks();
+      };
+
+      loadTasks();
+    </script>
+  </body>
+</html>
