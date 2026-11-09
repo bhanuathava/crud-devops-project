@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crud-app
+  namespace: crud-app
+  labels:
+    app: crud-app
+    app.kubernetes.io/name: crud-app
+    app.kubernetes.io/part-of: crud-devops-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crud-app
+  template:
+    metadata:
+      labels:
+        app: crud-app            # must match spec.selector.matchLabels
+        app.kubernetes.io/name: crud-app
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: crud-app
+          image: crud-devops-project:1.0
+          imagePullPolicy: IfNotPresent   # image is loaded into minikube, not pulled
+          ports:
+            - name: http
+              containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: crud-app-config
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: crud-app-secrets, key: DB_PASSWORD }
+            - name: RAILS_MASTER_KEY
+              valueFrom:
+                secretKeyRef: { name: crud-app-secrets, key: RAILS_MASTER_KEY }
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          # The entrypoint runs db:prepare before Puma, so allow time to boot.
+          startupProbe:
+            httpGet: { path: /up, port: http }
+            periodSeconds: 5
+            failureThreshold: 24       # up to 2 minutes to start
+          readinessProbe:
+            httpGet: { path: /up, port: http }
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: { path: /up, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3

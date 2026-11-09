@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: crud-app-config
+  namespace: crud-app
+  labels:
+    app.kubernetes.io/part-of: crud-devops-project
+data:
+  DB_HOST: mysql            # the MySQL Service name, resolved by cluster DNS
+  DB_PORT: "3306"
+  DB_USERNAME: app
+  DB_NAME: crud_devops_project_production
+  RAILS_ENV: production
+  RAILS_MAX_THREADS: "5"    # threads per Puma worker = DB pool size
+  WEB_CONCURRENCY: "2"      # Puma worker processes
