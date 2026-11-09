@@ -108,8 +108,33 @@ kubectl apply -f k8s/deployment.yaml -f k8s/service.yaml -f k8s/hpa.yaml
 minikube service crud-app -n crud-app --url
 ```
 
+**Redeploy from scratch (verified).** I deleted the `crud-app` namespace and ran the commands
+above in order. All pods were Ready in ~25 s, `db:prepare` created the schema in an empty
+database (`SHOW TABLES` → `tasks`, `schema_migrations`, `ar_internal_metadata`) and
+`GET /api/tasks` returned `[]` ([`evidence/08-fresh-redeploy.txt`](evidence/08-fresh-redeploy.txt)).
+
+> **minikube gotcha:** the first attempt still showed the old tasks. minikube's hostpath
+> provisioner stores data under `/tmp/hostpath-provisioner/<namespace>/<pvc-name>`, and deleting
+> the namespace left the old PersistentVolume and its folder behind, so the new claim (same
+> namespace + name) mounted the old data. For a truly empty database:
+>
+> ```bash
+> kubectl delete namespace crud-app
+> kubectl get pv            # delete any leftover crud-app volume with: kubectl delete pv <name>
+> minikube ssh -- 'sudo rm -rf /tmp/hostpath-provisioner/crud-app'
+> ```
+>
+> This is also a useful reminder of why the StatefulSet + PVC matter: data outlives the pods.
+
 `kubectl get pods` / `kubectl get services` output: [`evidence/01-k8s-pods-services.txt`](evidence/01-k8s-pods-services.txt)
 (app and `mysql-0` both `1/1 Running`, `crud-app` NodePort `80:30080/TCP`, PVC `Bound`).
+
+**Web page test on Kubernetes.** On the fresh deployment, through `kubectl port-forward
+svc/crud-app 8080:80`, every control on the page was exercised and the database checked after
+each step ([`evidence/09-ui-click-through.txt`](evidence/09-ui-click-through.txt)): an empty
+title is blocked by the browser; Create (button and Enter key); tick and untick the checkbox
+(progress bar 0% → 50% → 0%); edit the title + Update; empty title + Update → "Could not update
+task" (API 400, data unchanged); Delete. No JavaScript errors.
 
 ### Why NodePort
 
@@ -207,6 +232,26 @@ the HPA went **1 → 2** about 20 s into the ramp-up (CPU 89% of request) and **
 | **p95** | **1,172 ms** ❌ | **891 ms** ✅ |
 | **p99** | **3,112 ms** | **1,128 ms** |
 | Max | 4,151 ms | 1,305 ms |
+
+**Third, clean run on a freshly deployed cluster** (HPA idle at 1 replica beforehand, nothing else
+running; [`evidence/10-clean-load-test-hpa.txt`](evidence/10-clean-load-test-hpa.txt),
+[`evidence/11-k6-raw-clean.txt`](evidence/11-k6-raw-clean.txt)):
+
+| Metric | Clean run, HPA (1 → 2) |
+|---|---|
+| Total requests | 40,544 |
+| Throughput | **470.8 req/s** |
+| Error rate | **0.00%** (40,544/40,544 checks passed) |
+| Median / avg | 2.3 ms / 67.5 ms |
+| p90 / **p95** / p99 | 203 ms / **456 ms** ✅ / 867 ms |
+| Max | 1,341 ms |
+
+Here the HPA only went to 2 replicas, and only ~60 s into the test: minikube's metrics-server
+reports CPU about once a minute, so the HPA reacts late to a short spike (the
+`FailedGetResourceMetric` warnings in its events are from the first minute after deploy, before
+any metrics existed — normal). Run-to-run variance on a laptop is large, because k6, MySQL
+and the app all share the same 4 minikube CPUs and Docker Desktop's 3.8 GiB, so the
+three runs should be read as a range, not exact numbers. All three had 0% errors.
 
 The HPA mostly fixed the tail: p99 fell by ~64% and max by ~69%, and the p95 < 1 s threshold
 passed (k6 Job `Complete`). The median rose slightly because new pods start cold and the

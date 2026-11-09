@@ -1,0 +1,26 @@
+# Fresh redeploy from scratch (2026-11-09 15:32:34)
+# namespace deleted, leftover PVs deleted, minikube hostpath folder wiped, then report steps run in order
+
+$ kubectl get pods,svc,hpa,pvc -n crud-app
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/crud-app-7b7575c85d-j6bc9   1/1     Running   0          6s
+pod/mysql-0                     1/1     Running   0          17s
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+service/crud-app   NodePort    10.110.170.170   <none>        80:30080/TCP   6s
+service/mysql      ClusterIP   None             <none>        3306/TCP       17s
+
+NAME                                           REFERENCE             TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/crud-app   Deployment/crud-app   cpu: <unknown>/70%   1         4         1          6s
+
+NAME                                       STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+persistentvolumeclaim/mysql-data-mysql-0   Bound    pvc-9829ddb6-f79b-4118-8273-f5a3f577be35   1Gi        RWO            standard       <unset>                 17s
+
+$ curl /api/tasks (empty database, created and migrated by db:prepare)
+[]
+
+$ kubectl exec mysql-0 -- SHOW TABLES
+Tables_in_crud_devops_project_production
+ar_internal_metadata
+schema_migrations
+tasks

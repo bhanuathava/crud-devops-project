@@ -1,0 +1,48 @@
+# Clean load test on a fresh deployment, HPA idle at 1 replica (2026-11-09 15:34:46)
+
+--- 15:34:46
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     2m18s
+crud-app-7b7575c85d-j6bc9   19m   155Mi   
+mysql-0                     27m   451Mi   
+--- 15:34:57
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     2m29s
+crud-app-7b7575c85d-j6bc9   19m   155Mi   
+mysql-0                     27m   451Mi   
+--- 15:35:07
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     2m39s
+crud-app-7b7575c85d-j6bc9   19m   155Mi   
+mysql-0                     27m   451Mi   
+--- 15:35:17
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     2m50s
+crud-app-7b7575c85d-j6bc9   19m   155Mi   
+mysql-0                     27m   451Mi   
+--- 15:35:28
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     3m
+crud-app-7b7575c85d-j6bc9   19m   155Mi   
+mysql-0                     27m   451Mi   
+--- 15:35:38
+crud-app   Deployment/crud-app   cpu: 7%/70%   1     4     1     3m10s
+crud-app-7b7575c85d-j6bc9   345m   232Mi   
+k6-load-test-plh4v          212m   151Mi   
+mysql-0                     88m    466Mi   
+--- 15:35:49
+crud-app   Deployment/crud-app   cpu: 138%/70%   1     4     1     3m21s
+crud-app-7b7575c85d-j6bc9   345m   232Mi   
+k6-load-test-plh4v          212m   151Mi   
+mysql-0                     88m    466Mi   
+--- 15:35:59
+crud-app   Deployment/crud-app   cpu: 138%/70%   1     4     2     3m31s
+crud-app-7b7575c85d-j6bc9   345m   232Mi   
+k6-load-test-plh4v          212m   151Mi   
+mysql-0                     88m    466Mi   
+--- 15:36:09
+crud-app   Deployment/crud-app   cpu: 138%/70%   1     4     2     3m41s
+crud-app-7b7575c85d-j6bc9   345m   232Mi   
+k6-load-test-plh4v          212m   151Mi   
+mysql-0                     88m    466Mi   
+--- 15:36:20
+crud-app   Deployment/crud-app   cpu: 138%/70%   1     4     2     3m52s
+crud-app-7b7575c85d-j6bc9   345m   232Mi   
+mysql-0                     88m    466Mi   
+NAME           STATUS     COMPLETIONS   DURATION   AGE
+k6-load-test   Complete   1/1           91s        94s

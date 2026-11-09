@@ -1,0 +1,20 @@
+# Web page click-through test on Kubernetes (http://localhost:8080 via kubectl port-forward)
+# Fresh, empty database. Each action followed by a 1 s pause, then page text + GET /api/tasks checked.
+
+Action                                         | Page message                  | Progress bar text              | Database afterwards
+-----------------------------------------------|-------------------------------|--------------------------------|------------------------------------------
+Load page                                      | -                             | (no tasks)                     | []
+Click "Create Task" with empty box             | browser "fill out this field" | (no tasks)                     | [] - blocked by required attribute, no request sent
+Type "Write report", click Create Task         | Task created                  | 0 of 1                         | id 1 "Write report"
+Type "Take screenshots", press Enter           | Task created                  | 0 of 2 tasks completed (0%)    | + id 2 "Take screenshots"; input box cleared
+Tick checkbox on "Write report"                | Task completed                | 1 of 2 tasks completed (50%)   | id 1 completed=true
+Edit id 2 to "Take k8s screenshots", Update    | Task updated                  | 1 of 2 tasks completed (50%)   | id 2 title changed
+Clear id 2 title, Update                       | Could not update task         | 1 of 2 tasks completed (50%)   | unchanged (API returned 400, as designed)
+Untick "Write report"                          | Task marked as not completed  | 0 of 2 tasks completed (0%)    | id 1 completed=false
+Click Delete on "Write report"                 | Task deleted                  | 0 of 1 tasks completed (0%)    | [{"id":2,"title":"Take k8s screenshots","completed":false}]
+
+Browser console: one error only - "400 (Bad Request)" from the deliberate empty-title update. No JavaScript errors.
+
+Note: an earlier automated attempt produced the title "UI test task UI test task twoone" because the robot typed
+into the box within milliseconds, before the first Create response arrived and the page cleared the box
+(public/index.html line 189). A human cannot type that fast; with a 1 s pause it behaves correctly.
